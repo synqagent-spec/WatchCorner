@@ -71,7 +71,7 @@
     "typescript": "5.7.3"
   },
   "pnpm": {
-    "approvedBuilds": [
+    "onlyBuiltDependencies": [
       "sharp"
     ]
   }
