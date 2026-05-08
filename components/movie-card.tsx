@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { Play, Star } from 'lucide-react'
 import { posterUrl } from '@/lib/embed-config'
@@ -12,6 +13,7 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ item, type, onClick }: MovieCardProps) {
+  const [imageError, setImageError] = useState(false)
   const title = item.title || item.name || 'Unknown'
   const date = item.release_date || item.first_air_date
   const year = date ? new Date(date).getFullYear() : ''
@@ -35,6 +37,7 @@ export function MovieCard({ item, type, onClick }: MovieCardProps) {
         fill
         className="object-cover transition-transform duration-300 group-hover:scale-110"
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+        onError={() => setImageError(true)}
       />
 
       {/* Rating Badge */}
@@ -65,9 +68,14 @@ export function MovieCard({ item, type, onClick }: MovieCardProps) {
         </div>
       </div>
 
-      {/* Loading Skeleton Overlay (shown while loading) */}
-      {!item.poster_path && (
-        <div className="absolute inset-0 shimmer" />
+      {/* Fallback Overlay (shown when no poster or on error) */}
+      {(!item.poster_path || imageError) && (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a2a4a] to-[#0d1526] flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-[#89CFF0] text-2xl mb-2">🎬</div>
+            <p className="text-xs text-[#6BAED4]">No poster</p>
+          </div>
+        </div>
       )}
     </button>
   )
