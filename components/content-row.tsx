@@ -72,7 +72,7 @@ export function ContentRow({
         {/* Scrollable Content */}
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4"
+          className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
         >
           {loading
             ? Array.from({ length: 6 }).map((_, i) => (

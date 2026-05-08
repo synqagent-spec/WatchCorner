@@ -9,6 +9,7 @@ import { MovieDetailPage } from '@/components/pages/movie-detail-page'
 import { TVDetailPage } from '@/components/pages/tv-detail-page'
 import { WatchMoviePage } from '@/components/pages/watch-movie-page'
 import { WatchTVPage } from '@/components/pages/watch-tv-page'
+import { TVShowsPage } from '@/components/pages/tv-shows-page'
 
 type PageParams = Record<string, string | number>
 
@@ -61,7 +62,7 @@ export default function MovieCorner() {
       case 'movies':
         return <MoviesPage onNavigate={navigate} />
       case 'tvshows':
-        return <HomePage onNavigate={navigate} />
+        return <TVShowsPage onNavigate={navigate} />
 
       case 'search':
         return (

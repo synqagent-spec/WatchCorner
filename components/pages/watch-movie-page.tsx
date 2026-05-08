@@ -102,7 +102,7 @@ export function WatchMoviePage({
                 className="absolute inset-0 w-full h-full"
                 allowFullScreen
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
+                sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
                 onError={() => setEmbedFallback(true)}
               />
               {embedFallback && (
