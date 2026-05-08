@@ -24,18 +24,38 @@ export function HomePage({ onNavigate }: HomePageProps) {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [moviesDay, moviesWeek, tvWeek, tvMonth] = await Promise.all([
+        const [moviesDay, moviesWeek, tvWeek, tvDay] = await Promise.allSettled([
           fetchTrendingMovies('day'),
           fetchTrendingMovies('week'),
           fetchTrendingTV('week'),
-          fetchTrendingTV('month'),
+          fetchTrendingTV('day'),
         ])
-        console.log('[v0] Movies Day:', moviesDay)
-        console.log('[v0] TV Week:', tvWeek)
-        setTrendingMoviesDay(moviesDay.results || [])
-        setTrendingMoviesWeek(moviesWeek.results || [])
-        setTrendingTVWeek(tvWeek.results || [])
-        setPopularTV(tvMonth.results || [])
+
+        if (moviesDay.status === 'fulfilled') {
+          console.log('[v0] Movies Day:', moviesDay.value)
+          setTrendingMoviesDay(moviesDay.value.results || [])
+        } else {
+          console.error('[v0] Movies Day failed:', moviesDay.reason)
+        }
+
+        if (moviesWeek.status === 'fulfilled') {
+          setTrendingMoviesWeek(moviesWeek.value.results || [])
+        } else {
+          console.error('[v0] Movies Week failed:', moviesWeek.reason)
+        }
+
+        if (tvWeek.status === 'fulfilled') {
+          console.log('[v0] TV Week:', tvWeek.value)
+          setTrendingTVWeek(tvWeek.value.results || [])
+        } else {
+          console.error('[v0] TV Week failed:', tvWeek.reason)
+        }
+
+        if (tvDay.status === 'fulfilled') {
+          setPopularTV(tvDay.value.results || [])
+        } else {
+          console.error('[v0] TV Day failed:', tvDay.reason)
+        }
       } catch (error) {
         console.error('[v0] Failed to load trending data:', error)
       } finally {
@@ -100,7 +120,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         />
 
         <ContentRow
-          title="Popular TV Series"
+          title="Trending TV Today"
           items={popularTV}
           type="tv"
           loading={loading}
