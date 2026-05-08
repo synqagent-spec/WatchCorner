@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       id: data.id,
       tmdb_id: data.id,
+      imdb_id: data.imdb_id || null,
       title: data.title || data.name,
       name: data.name || data.title,
       overview: data.overview || '',
@@ -28,7 +29,11 @@ export async function GET(request: NextRequest) {
       release_date: data.release_date,
       first_air_date: data.first_air_date,
       number_of_seasons: data.number_of_seasons,
-      cast: data.credits?.cast || [],
+      cast: (data.credits?.cast || []).slice(0, 20).map((p: { name: string; character: string; profile_path: string | null }) => ({
+        name: p.name,
+        character: p.character,
+        profile_path: p.profile_path,
+      })),
     })
   } catch (error) {
     console.error('[v0] Details API error:', error)

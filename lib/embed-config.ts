@@ -17,10 +17,10 @@ export const getTVEmbedUrl = (tmdbId: string | number, season: number, episode: 
 const IMG_BASE = "https://image.tmdb.org/t/p/"
 
 export const posterUrl = (path: string | null) =>
-  path ? `${IMG_BASE}w342${path}` : "/placeholder-poster.jpg"
+  path ? `${IMG_BASE}w342${path}` : "/placeholder.jpg"
 
 export const backdropUrl = (path: string | null) =>
-  path ? `${IMG_BASE}w1280${path}` : "/placeholder-backdrop.jpg"
+  path ? `${IMG_BASE}w1280${path}` : "/placeholder.jpg"
 
 export const profileUrl = (path: string | null) =>
-  path ? `${IMG_BASE}w185${path}` : "/placeholder-profile.jpg"
+  path ? `${IMG_BASE}w185${path}` : "/placeholder-user.jpg"

@@ -85,7 +85,7 @@ export function WatchMoviePage({
             {/* Player */}
             <div className="relative aspect-video rounded-lg overflow-hidden glass-card">
               <iframe
-                src={getMovieEmbedUrl(tmdbId, embedFallback ? 'secondary' : false)}
+                src={getMovieEmbedUrl(tmdbId)}
                 title={title}
                 className="absolute inset-0 w-full h-full"
                 allowFullScreen

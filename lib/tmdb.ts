@@ -60,11 +60,11 @@ export const getSeasonDetails = (id: number, season: number) =>
 export const searchMulti = (query: string) =>
   tmdbFetch("/search/multi", { query })
 
-export const searchMovies = (query: string) =>
-  tmdbFetch("/search/movie", { query })
+export const searchMovies = (query: string, page: string = '1') =>
+  tmdbFetch("/search/movie", { query, page })
 
-export const searchTV = (query: string) =>
-  tmdbFetch("/search/tv", { query })
+export const searchTV = (query: string, page: string = '1') =>
+  tmdbFetch("/search/tv", { query, page })
 
 // ─── Genres ───────────────────────────────────────────────────
 export const getGenres = (type: "movie" | "tv") =>

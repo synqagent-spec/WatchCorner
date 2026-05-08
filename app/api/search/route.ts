@@ -13,8 +13,8 @@ export async function GET(request: NextRequest) {
 
   try {
     const data = type === 'tv' 
-      ? await searchTV(query) 
-      : await searchMovies(query)
+      ? await searchTV(query, page) 
+      : await searchMovies(query, page)
     
     return NextResponse.json({
       results: data.results || [],

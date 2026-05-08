@@ -109,7 +109,7 @@ export function WatchTVPage({
             {/* Player */}
             <div className="relative aspect-video rounded-lg overflow-hidden glass-card">
               <iframe
-                src={getTVEmbedUrl(tmdbId, season, episode, embedFallback ? 'secondary' : false)}
+                src={getTVEmbedUrl(tmdbId, season, episode)}
                 title={`${title} S${season}E${episode}`}
                 className="absolute inset-0 w-full h-full"
                 allowFullScreen
