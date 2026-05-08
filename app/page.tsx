@@ -71,7 +71,7 @@ export default function MovieCorner() {
       case 'movie':
         return (
           <MovieDetailPage
-            imdbId={String(params.imdbId)}
+            tmdbId={String(params.id)}
             onNavigate={navigate}
             onBack={goBack}
           />
@@ -80,7 +80,7 @@ export default function MovieCorner() {
       case 'tv':
         return (
           <TVDetailPage
-            imdbId={String(params.imdbId)}
+            tmdbId={String(params.id)}
             onNavigate={navigate}
             onBack={goBack}
           />
@@ -89,7 +89,7 @@ export default function MovieCorner() {
       case 'watch-movie':
         return (
           <WatchMoviePage
-            imdbId={String(params.imdbId)}
+            tmdbId={String(params.id)}
             title={String(params.title || 'Movie')}
             onNavigate={navigate}
             onBack={goBack}
@@ -99,7 +99,7 @@ export default function MovieCorner() {
       case 'watch-tv':
         return (
           <WatchTVPage
-            imdbId={String(params.imdbId)}
+            tmdbId={String(params.id)}
             title={String(params.title || 'TV Show')}
             season={Number(params.season) || 1}
             episode={Number(params.episode) || 1}

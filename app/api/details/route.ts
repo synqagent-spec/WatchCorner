@@ -1,41 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-async function fetchWithFallback(urls: string[]): Promise<any> {
-  for (const url of urls) {
-    try {
-      const res = await fetch(url, { next: { revalidate: 3600 } })
-      if (res.ok) {
-        const data = await res.json()
-        return data
-      }
-    } catch (error) {
-      console.log(`[v0] API endpoint failed, trying next: ${url}`)
-    }
-  }
-  throw new Error('All API endpoints failed')
-}
+import { getFullDetails } from '@/lib/tmdb'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id') || ''
-  const type = searchParams.get('type') || 'movie'
+  const type = (searchParams.get('type') as 'movie' | 'tv') || 'movie'
 
   if (!id) {
     return NextResponse.json({ error: 'ID required' }, { status: 400 })
   }
 
   try {
-    const endpoint = type === 'tv' ? '/tv' : '/movie'
-    const urls = [
-      `https://api.2embed.cc${endpoint}?tmdb_id=${id}`,
-      `https://api.2embed.skin${endpoint}?tmdb_id=${id}`,
-    ]
-
-    const data = await fetchWithFallback(urls)
+    const data = await getFullDetails(type, parseInt(id))
     
     return NextResponse.json({
-      id: data.id || parseInt(id as string),
-      tmdb_id: data.tmdb_id || parseInt(id as string),
+      id: data.id,
+      tmdb_id: data.id,
       title: data.title || data.name,
       name: data.name || data.title,
       overview: data.overview || '',
@@ -48,7 +28,7 @@ export async function GET(request: NextRequest) {
       release_date: data.release_date,
       first_air_date: data.first_air_date,
       number_of_seasons: data.number_of_seasons,
-      cast: data.cast || [],
+      cast: data.credits?.cast || [],
     })
   } catch (error) {
     console.error('[v0] Details API error:', error)

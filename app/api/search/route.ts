@@ -1,21 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-async function fetchWithFallback(urls: string[]): Promise<any> {
-  for (const url of urls) {
-    try {
-      const res = await fetch(url, { next: { revalidate: 60 } })
-      if (res.ok) {
-        const data = await res.json()
-        if (data.results && data.results.length > 0) {
-          return data
-        }
-      }
-    } catch (error) {
-      console.log(`[v0] API endpoint failed, trying next: ${url}`)
-    }
-  }
-  throw new Error('All API endpoints failed')
-}
+import { searchMovies, searchTV } from '@/lib/tmdb'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -28,13 +12,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const endpoint = type === 'tv' ? '/searchtv' : '/search'
-    const urls = [
-      `https://api.2embed.cc${endpoint}?q=${encodeURIComponent(query)}&page=${page}`,
-      `https://api.2embed.skin${endpoint}?q=${encodeURIComponent(query)}&page=${page}`,
-    ]
-
-    const data = await fetchWithFallback(urls)
+    const data = type === 'tv' 
+      ? await searchTV(query) 
+      : await searchMovies(query)
     
     return NextResponse.json({
       results: data.results || [],

@@ -6,7 +6,7 @@ import { Play, Star, Clock, Calendar, ArrowLeft } from 'lucide-react'
 import { ContentRow } from '@/components/content-row'
 import { posterUrl, backdropUrl, profileUrl } from '@/lib/embed-config'
 import { getFullDetails, getSimilar } from '@/lib/tmdb'
-import type { MediaDetail, MediaItem } from '@/lib/api'
+import { getTmdbId, type MediaDetail, type MediaItem } from '@/lib/api'
 
 interface MovieDetailPageProps {
   tmdbId: string
