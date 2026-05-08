@@ -1,22 +1,5 @@
 import type { Metadata } from 'next'
-import { DM_Sans, DM_Mono, Cinzel } from 'next/font/google'
 import './globals.css'
-
-const dmSans = DM_Sans({ 
-  subsets: ["latin"],
-  variable: '--font-dm-sans'
-})
-
-const dmMono = DM_Mono({ 
-  subsets: ["latin"],
-  weight: ['400', '500'],
-  variable: '--font-dm-mono'
-})
-
-const cinzel = Cinzel({ 
-  subsets: ["latin"],
-  variable: '--font-cinzel'
-})
 
 export const metadata: Metadata = {
   title: 'MovieCorner - Stream Movies & TV Shows',
@@ -37,8 +20,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${dmMono.variable} ${cinzel.variable}`}>
-      <body className="font-sans antialiased bg-[#04060f] text-[#E8F4FD] min-h-screen">
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@100..1000&display=swap" rel="stylesheet" />
+      </head>
+      <body className="antialiased bg-[#04060f] text-[#E8F4FD] min-h-screen">
         {children}
       </body>
     </html>
