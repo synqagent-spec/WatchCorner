@@ -1,0 +1,112 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { HeroBanner } from '@/components/hero-banner'
+import { ContentRow } from '@/components/content-row'
+import {
+  fetchTrendingMovies,
+  fetchTrendingTV,
+  getTmdbId,
+  type MediaItem,
+} from '@/lib/api'
+
+interface HomePageProps {
+  onNavigate: (page: string, params?: Record<string, string | number>) => void
+}
+
+export function HomePage({ onNavigate }: HomePageProps) {
+  const [trendingMoviesDay, setTrendingMoviesDay] = useState<MediaItem[]>([])
+  const [trendingMoviesWeek, setTrendingMoviesWeek] = useState<MediaItem[]>([])
+  const [trendingTVWeek, setTrendingTVWeek] = useState<MediaItem[]>([])
+  const [popularTV, setPopularTV] = useState<MediaItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [moviesDay, moviesWeek, tvWeek, tvMonth] = await Promise.all([
+          fetchTrendingMovies('day'),
+          fetchTrendingMovies('week'),
+          fetchTrendingTV('week'),
+          fetchTrendingTV('month'),
+        ])
+        console.log('[v0] Movies Day:', moviesDay)
+        console.log('[v0] TV Week:', tvWeek)
+        setTrendingMoviesDay(moviesDay.results || [])
+        setTrendingMoviesWeek(moviesWeek.results || [])
+        setTrendingTVWeek(tvWeek.results || [])
+        setPopularTV(tvMonth.results || [])
+      } catch (error) {
+        console.error('[v0] Failed to load trending data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadData()
+  }, [])
+
+  const handleItemClick = (item: MediaItem, type: 'movie' | 'tv') => {
+    const title = item.title || item.name || 'Unknown'
+    onNavigate(type, { id: getTmdbId(item), title })
+  }
+
+  const handlePlayFromHero = (item: MediaItem) => {
+    onNavigate('watch-movie', {
+      id: getTmdbId(item),
+      title: item.title || item.name || 'Unknown',
+    })
+  }
+
+  const handleInfoFromHero = (item: MediaItem) => {
+    onNavigate('movie', {
+      id: getTmdbId(item),
+      title: item.title || item.name || 'Unknown',
+    })
+  }
+
+  return (
+    <div>
+      {/* Hero Banner */}
+      <HeroBanner
+        items={trendingMoviesDay.slice(0, 5)}
+        onPlay={handlePlayFromHero}
+        onInfo={handleInfoFromHero}
+      />
+
+      {/* Content Rows */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10 space-y-8 pb-20">
+        <ContentRow
+          title="Trending Today"
+          items={trendingMoviesDay}
+          type="movie"
+          loading={loading}
+          onItemClick={(item) => handleItemClick(item, 'movie')}
+        />
+
+        <ContentRow
+          title="Trending TV Shows"
+          items={trendingTVWeek}
+          type="tv"
+          loading={loading}
+          onItemClick={(item) => handleItemClick(item, 'tv')}
+        />
+
+        <ContentRow
+          title="Trending This Week"
+          items={trendingMoviesWeek}
+          type="movie"
+          loading={loading}
+          onItemClick={(item) => handleItemClick(item, 'movie')}
+        />
+
+        <ContentRow
+          title="Popular TV Series"
+          items={popularTV}
+          type="tv"
+          loading={loading}
+          onItemClick={(item) => handleItemClick(item, 'tv')}
+        />
+      </div>
+    </div>
+  )
+}
