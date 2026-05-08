@@ -19,9 +19,15 @@ export function HomePage({ onNavigate }: HomePageProps) {
   const [trendingMoviesWeek, setTrendingMoviesWeek] = useState<MediaItem[]>([])
   const [trendingTVWeek, setTrendingTVWeek] = useState<MediaItem[]>([])
   const [popularTV, setPopularTV] = useState<MediaItem[]>([])
+  const [recents, setRecents] = useState<MediaItem[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const savedRecents = localStorage.getItem('watch_recents')
+    if (savedRecents) {
+      setRecents(JSON.parse(savedRecents))
+    }
+
     const loadData = async () => {
       try {
         const [moviesDay, moviesWeek, tvWeek, tvDay] = await Promise.allSettled([
@@ -95,6 +101,15 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
       {/* Content Rows */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10 space-y-8 pb-20">
+        {recents.length > 0 && (
+          <ContentRow
+            title="Continue Watching"
+            items={recents}
+            type="movie"
+            onItemClick={(item) => handleItemClick(item, item.title ? 'movie' : 'tv')}
+          />
+        )}
+
         <ContentRow
           title="Trending Today"
           items={trendingMoviesDay}

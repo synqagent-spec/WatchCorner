@@ -56,6 +56,18 @@ export function WatchTVPage({
         setEpisodes(seasonData.episodes || [])
         setSimilar(similarData.results || [])
         setTrending(trendingData.results || [])
+
+        // Save to recents
+        if (tvData) {
+          const savedRecents = localStorage.getItem('watch_recents')
+          let recents = savedRecents ? JSON.parse(savedRecents) : []
+          // Remove if already exists
+          recents = recents.filter((item: any) => (item.tmdb_id || item.id) !== tvData.id)
+          // Add to front
+          recents.unshift(tvData)
+          // Keep only last 10
+          localStorage.setItem('watch_recents', JSON.stringify(recents.slice(0, 10)))
+        }
       } catch (error) {
         console.error('Failed to load data:', error)
       } finally {
@@ -114,6 +126,7 @@ export function WatchTVPage({
                 className="absolute inset-0 w-full h-full"
                 allowFullScreen
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
                 onError={() => setEmbedFallback(true)}
               />
               {embedFallback && (

@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import { Navbar } from '@/components/navbar'
 import { HomePage } from '@/components/pages/home-page'
+import { MoviesPage } from '@/components/pages/movies-page'
 import { SearchPage } from '@/components/pages/search-page'
 import { MovieDetailPage } from '@/components/pages/movie-detail-page'
 import { TVDetailPage } from '@/components/pages/tv-detail-page'
@@ -56,7 +57,9 @@ export default function MovieCorner() {
 
     switch (page) {
       case 'home':
+        return <HomePage onNavigate={navigate} />
       case 'movies':
+        return <MoviesPage onNavigate={navigate} />
       case 'tvshows':
         return <HomePage onNavigate={navigate} />
 
