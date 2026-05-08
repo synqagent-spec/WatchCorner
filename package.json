@@ -71,8 +71,7 @@
     "typescript": "5.7.3"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp"
-    ]
-  }
+    "ignoredBuildScripts": []
+  },
+  "packageManager": "pnpm@9.15.4"
 }
